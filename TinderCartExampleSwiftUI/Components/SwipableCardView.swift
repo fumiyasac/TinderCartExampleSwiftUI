@@ -11,23 +11,22 @@ struct SwipableCardView: View {
 
     // MARK: - Property
 
-    //
+    // スワイプ動作時のStatusを保持する
     @State private var swipeStatus: SwipeStatus = .none
 
-    //
+    // Drag処理時（ここではスワイプ動作時と同義）の変化量を保持する
     @State private var swipeOffset: CGSize = .zero
 
-    //
     private let foodMenuEntity: FoodMenuEntity
 
-    //
+    // 配置元の画面から削除する際に実行したいActionのClosure
     private let removeAction: (_ foodMenuEntity: FoodMenuEntity) -> Void
 
     // 画面幅を基準としたスワイプ移動量の割合
     // 👉 この割合がCardを画面上から削除する基準となる
-    private let thresholdActionPercentage: CGFloat = 0.5
+    private let thresholdActionPercentage: CGFloat = 0.68
 
-    // 👉 この割合がCardを画面上から削除する基準となる
+    // 👉 この割合がSwipe動作中にメッセージを表示する基準となる
     private let thresholdMessagePercentage: CGFloat = 0.12
     
     // MARK: - Enum
@@ -54,20 +53,21 @@ struct SwipableCardView: View {
         // 👉 画面幅を基準としてスワイプ変化量算出のために、GeometryReaderを画面全体に適用する
         GeometryReader { proxy in
             
-            //
+            // 要素全体を囲むVStack
             VStack(alignment: .leading) {
                 
-                //
+                // ① サムネイル画像
+                // 👉 サムネイル画像の上にメッセージを表示したいので、ZStackで囲んでいる
                 ZStack(alignment: self.swipeStatus == .addToCart ? .topLeading : .topTrailing) {
                     
-                    //
+                    // メインで表示するサムネイル画像
                     Image(foodMenuEntity.imageName)
                         .resizable()
                         .aspectRatio(contentMode: .fill)
                         .frame(width: proxy.size.width, height: proxy.size.height)
                         .clipped()
 
-                    //
+                    // 👉 右Swipe時に左上にメッセージを表示する
                     if swipeStatus == .addToCart {
                         
                         Text("🛒今日はコレ！")
@@ -81,7 +81,7 @@ struct SwipableCardView: View {
                             .background(.white)
                             .padding(24.0)
                         
-                    //
+                    // 👉 左Swipe時に左上にメッセージを表示する
                     } else if swipeStatus == .notSelect {
                         
                         Text("🙅違うかなぁ…")
@@ -95,13 +95,12 @@ struct SwipableCardView: View {
                             .background(.white)
                             .padding(24.0)
 
-                    //
+                    // 👉 スワイプ時以外は何も表示しない
                     } else {
                         EmptyView()
                     }
-                    
                 }
-                //
+                // ② サムネイル画像に関連する情報を表示する
                 HStack {
                     VStack(alignment: .leading, spacing: 8.0) {
                         Text(foodMenuEntity.name)
@@ -121,21 +120,22 @@ struct SwipableCardView: View {
             .background(Color.white)
             .cornerRadius(8.0)
             .shadow(radius: 4.0)
-            //
+            // 操作時にバネ運動の様なAnimationを付与する
+            // 👉 しきい値を超過せずに元に戻る場合
             .animation(.spring, value: swipeOffset)
-            //
+            // スワイプ処理時にX軸方法のOffset値を変更する
             .offset(x: swipeOffset.width, y: 4.0)
-            //
-            .rotationEffect(.degrees(Double(swipeOffset.width / proxy.size.width) * 25.0), anchor: .bottom)
-            //
+            // スワイプ処理時にこのView要素に対して回転処理を利用して傾きをつける
+            .rotationEffect(.degrees(Double(swipeOffset.width / proxy.size.width) * 24.0), anchor: .bottom)
+            // DragGestureを利用してスワイプ動作を組み立てる
             .gesture(
                 DragGesture()
                     .onChanged { value in
 
-                        //
+                        // スワイプ変化量を変数に保持する
                         swipeOffset = value.translation
 
-                        //
+                        // 移動量の割合に応じてメッセージを表示する
                         if getGesturePercentageBasedOnScreenWidth(proxy: proxy, dragGestureValue: value) >= thresholdMessagePercentage {
                             swipeStatus = .addToCart
                         } else if getGesturePercentageBasedOnScreenWidth(proxy: proxy, dragGestureValue: value) <= -thresholdMessagePercentage {
@@ -147,15 +147,15 @@ struct SwipableCardView: View {
                     }
                     .onEnded { value in
 
-                        // determine snap distance > 0.5 aka half the width of the screen
+                        // 画面幅の半分以上まで動いた際は、この要素を削除対象とする
                         if abs(getGesturePercentageBasedOnScreenWidth(proxy: proxy, dragGestureValue: value)) > thresholdActionPercentage {
 
-                            //
+                            // 配置元でこのView要素を削除する処理を実行する
                             removeAction(foodMenuEntity)
 
                         } else {
 
-                            //
+                            // 現在状態とスワイプ変化量をリセットする
                             swipeOffset = .zero
                             swipeStatus = .none
                         }
