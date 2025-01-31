@@ -7,6 +7,9 @@
 
 import SwiftUI
 
+// 参考:
+// https://github.com/bbaars/SwiftUI-Tinder-SwipeableCards
+
 struct ContentView: View {
 
     // MARK: - Body
