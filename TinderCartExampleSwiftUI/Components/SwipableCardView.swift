@@ -58,7 +58,7 @@ struct SwipableCardView: View {
                 
                 // ① サムネイル画像
                 // 👉 サムネイル画像の上にメッセージを表示したいので、ZStackで囲んでいる
-                ZStack(alignment: self.swipeStatus == .addToCart ? .topLeading : .topTrailing) {
+                ZStack(alignment: swipeStatus == .addToCart ? .topLeading : .topTrailing) {
                     
                     // メインで表示するサムネイル画像
                     Image(foodMenuEntity.imageName)
