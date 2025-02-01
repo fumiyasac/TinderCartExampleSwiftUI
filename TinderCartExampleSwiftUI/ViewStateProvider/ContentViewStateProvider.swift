@@ -25,7 +25,7 @@ public final class ContentViewStateProviderImpl: ContentViewStateProvider {
 
     // MARK: - Property (Computed)
 
-    private var _foodMenus: [FoodMenuEntity]  = []
+    private var _foodMenus: [FoodMenuEntity] = []
 
     // MARK: - Property (`@Observable`)
 
@@ -47,6 +47,20 @@ public final class ContentViewStateProviderImpl: ContentViewStateProvider {
 
     func removeFoodMenu(id: Int) {
         let index = id - 1
+        guard let _ = _foodMenus[safe: index] else {
+            return
+        }
         _foodMenus.remove(at: index)
+    }
+}
+
+// MARK: - Fileprivate Extension
+
+fileprivate extension Collection {
+
+    // MARK: - Subscript
+
+    subscript (safe index: Index) -> Element? {
+        return indices.contains(index) ? self[index] : nil
     }
 }
