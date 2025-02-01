@@ -24,7 +24,7 @@ struct SwipableCardView: View {
 
     // 画面幅を基準としたスワイプ移動量の割合
     // 👉 この割合がCardを画面上から削除する基準となる
-    private let thresholdActionPercentage: CGFloat = 0.68
+    private let thresholdActionPercentage: CGFloat = 0.45
 
     // 👉 この割合がSwipe動作中にメッセージを表示する基準となる
     private let thresholdMessagePercentage: CGFloat = 0.12
