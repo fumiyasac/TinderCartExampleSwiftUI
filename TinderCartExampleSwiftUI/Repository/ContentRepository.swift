@@ -86,7 +86,7 @@ final class ContentRepositoryImpl: ContentRepository {
             FoodMenuEntity(
                 id: 12,
                 name: "きのこ炊き込みご飯",
-                caregory: "韓国風・ご飯もの",
+                caregory: "和風・ご飯もの",
                 imageName: "food_example12"
             )
         ]
