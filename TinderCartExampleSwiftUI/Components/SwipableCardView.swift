@@ -28,7 +28,7 @@ struct SwipableCardView: View {
 
     // 👉 この割合がSwipe動作中にメッセージを表示する基準となる
     private let thresholdMessagePercentage: CGFloat = 0.12
-    
+
     // MARK: - Enum
 
     // Swipe時の状態を表現したEnum
@@ -104,15 +104,41 @@ struct SwipableCardView: View {
                 HStack {
                     VStack(alignment: .leading, spacing: 8.0) {
                         Text(foodMenuEntity.name)
-                            .font(.title)
+                            .font(.callout)
                             .bold()
-                        Text(foodMenuEntity.caregory)
-                            .font(.subheadline)
-                            .bold()
+                            .padding(.top, 12.0)
+                        VStack {
+                            Text(foodMenuEntity.caregory)
+                                .font(.caption)
+                                .bold()
+                                .foregroundStyle(.white)
+                                .padding(4.0)
+                        }
+                        .overlay(
+                            RoundedRectangle(cornerRadius: 0.0)
+                                    .stroke(Color.orange, lineWidth: 1.0)
+                        )
+                        .background(.orange)
+                        .padding(.top, 4.0)
+                            
                     }
                     Spacer()
-                    Image(systemName: "info.circle")
-                        .foregroundColor(.gray)
+                    HStack {
+                        Button(action: {}, label: {
+                            Image(systemName: "star.fill")
+                                .foregroundColor(.yellow)
+                        })
+                        Button(action: {}, label: {
+                            Image(systemName: "cart.fill")
+                                .foregroundColor(.brown)
+                        })
+                        .padding(.horizontal, 10.0)
+                        Button(action: {}, label: {
+                            Image(systemName: "frying.pan.fill")
+                                .foregroundColor(.gray)
+                        })
+                    }
+                    .padding(.top, 4.0)
                 }
                 .padding(.horizontal)
             }
@@ -177,7 +203,7 @@ struct SwipableCardView: View {
     SwipableCardView(
         foodMenuEntity: FoodMenuEntity(
             id: 1,
-            name: "熱々グラタン",
+            name: "熱々エビグラタン",
             caregory: "洋風・オーブン料理",
             imageName: "food_example1"
         ),
