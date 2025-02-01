@@ -20,6 +20,15 @@ __【🎥 Movie】__
 
 https://github.com/user-attachments/assets/aa38805b-2aa3-4529-9831-189eaae4b13b
 
-## 2. ポイント解説まとめノート
+## 2. 設計資料
 
-m(_ _)m < Please wait ... Sorry!
+実装方針や着眼点を解説した図解ノートになります。
+
+__【📝 Note of Tinder Type UI Imprementation】__
+
+
+![実装方針図解ノートその1](./images/simple_tinder_type_example_ui1.jpg)
+
+![実装方針図解ノートその2](./images/simple_tinder_type_example_ui2.jpg)
+
+![実装方針図解ノートその2](./images/simple_tinder_type_example_ui3.jpg)
