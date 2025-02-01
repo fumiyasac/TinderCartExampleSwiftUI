@@ -7,8 +7,8 @@
 
 import SwiftUI
 
-// 参考:
-// https://github.com/bbaars/SwiftUI-Tinder-SwipeableCards
+// Tinderの様な動きをSwiftUIを利用して実現する
+// 参考: https://github.com/bbaars/SwiftUI-Tinder-SwipeableCards
 
 struct ContentView: View {
 
@@ -29,8 +29,7 @@ struct ContentView: View {
 
         NavigationStack {
             VStack {
-                
-                //
+                // ① タイトルヘッダー表示
                 VStack {
                     Text("⭐️今日の気分に合う献立を選ぼう⭐️")
                         .font(.body)
@@ -49,10 +48,9 @@ struct ContentView: View {
                 .padding(.top, 16.0)
                 .padding(.horizontal, 8.0)
 
-                //
+                // ②-1. 画面上にカードが1枚も存在しない場合は、再度配置をするボタンを配置する
                 if contentViewStateProvider.foodMenus.isEmpty {
-                    
-                    //
+
                     HStack {
                         Spacer()
                         Button(action: {
@@ -73,15 +71,16 @@ struct ContentView: View {
                     }
                     .padding(.vertical, 16.0)
                 
-                //
+                // ②-2. 画面上にカードが少なくとも1枚存在する場合は、カードを重ねる様に表示する
                 } else {
-                    
-                    //
+
+                    // GeometryReaderを利用して、デバイス幅を元に要素配置に必要な値を算出する
                     GeometryReader { proxy in
+                        // 👉 1つあたりの表示要素を重ねるためにZStackを用いる
                         ZStack {
                             ForEach(contentViewStateProvider.foodMenus, id: \.self) { foodMenuEntity in
                                 Group {
-                                    //
+                                    // 取得できたデータの順番にカード用View要素を重ねて配置する
                                     SwipableCardView(foodMenuEntity: foodMenuEntity, removeAction: { removeTargetFoodMenuEntity in
                                         contentViewStateProvider.removeFoodMenu(id: removeTargetFoodMenuEntity.id)
                                     })
@@ -95,7 +94,7 @@ struct ContentView: View {
                     .padding(.top, 16.0)
                 }
  
-                // 👉
+                // ③ 上寄せにするためのSpacer
                 Spacer()
             }
             .onFirstAppear {
@@ -108,15 +107,18 @@ struct ContentView: View {
     
     // MARK: - Private Function
 
-    //
+    // スワイプできるカード要素の幅を算出する
+    // 👉 SwipableCardView ~ .frameの箇所でこの計算値を利用しています
     private func getCardWidth(proxy: GeometryProxy, id: Int) -> CGFloat {
         let offset: CGFloat = getCardOffset(proxy: proxy, id: id)
         let originCardWidth: CGFloat = proxy.size.width - 36.0
-        // 👉
-        // https://ios-docs.dev/invalid-frame-dimension/
+        // 👉 負数になってはいけないWarningが発生したので、値に絶対値を利用する
+        // 参考: https://ios-docs.dev/invalid-frame-dimension/
         return abs(originCardWidth - offset)
     }
 
+    // スワイプできるカード要素のオフセット値を算出する
+    // 👉 SwipableCardView ~ .offsetの箇所でこの計算値を利用しています
     private func getCardOffset(proxy: GeometryProxy, id: Int) -> CGFloat {
         return CGFloat(contentViewStateProvider.foodMenus.count - 1 - id) * 6.0
     }
