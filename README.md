@@ -16,6 +16,10 @@ __【過去にUIKitを利用して作成したサンプル】__
 
 <img src="./images/tinder_cart_example1.png" width="320"> <img src="./images/tinder_cart_example2.png" width="320">
 
+__【🎥 Movie】__
+
+https://github.com/user-attachments/assets/aa38805b-2aa3-4529-9831-189eaae4b13b
+
 ## 2. ポイント解説まとめノート
 
 m(_ _)m < Please wait ... Sorry!
